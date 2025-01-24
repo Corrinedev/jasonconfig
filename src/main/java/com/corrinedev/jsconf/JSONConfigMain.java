@@ -25,7 +25,7 @@ public class JSONConfigMain {
     // Define mod id in a common place for everything to reference
     public static final String MODID = "jsconf";
     // Directly reference a slf4j logger
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public JSONConfigMain() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -36,6 +36,8 @@ public class JSONConfigMain {
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
         Config CONF = new Config("jsonConfigConfig");
+        Config CONF2 = new Config("exampleConfig");
+        CONF2.register();
         CONF.addValue(new ConfigValue<Integer>(5, "integerTest"));
         CONF.addValue(new ConfigValue<String>("eee eee 123", "stringTest"));
         CONF.addValue(new ConfigValue<Float>(5.1256f, "floatTest"));
