@@ -1,30 +1,39 @@
 package com.corrinedev.jsconf.api;
 
-import com.google.gson.Gson;
+import com.corrinedev.jsconf.JSConf;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import net.minecraftforge.common.ForgeConfigSpec;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 import static com.corrinedev.jsconf.api.Config.GSON;
 
 public class ConfigValue<E> {
     public final String element;
     private E value;
-    public ConfigValue(E value, String element) {
+    private final Type type;
+    public ConfigValue(E value, String element, Type type) {
         this.value = value;
         this.element = element;
+        this.type = type;
     }
-    public ConfigValue(E value, String element, String confToAdd) {
-        this.value = value;
-        this.element = element;
-        LoadedConfigs.CONFIGS.get(confToAdd).addValue(this);
+
+    public Type getType() {
+        return type;
     }
-    public ConfigValue(E value, String element, Config confToAdd) {
-        this.value = value;
-        this.element = element;
+
+    public ConfigValue(E value, String element, String confToAdd, Type type) {
+        this(value, element, type);
+        JSConf.CONFIGS.get(confToAdd).addValue(this);
+    }
+    public ConfigValue(E value, String element, Config confToAdd, Type type) {
+        this(value, element, type);
         confToAdd.addValue(this);
     }
     public JsonElement getAsJson() {
-        return GSON.toJsonTree(value, value.getClass());
+        return GSON.toJsonTree(value, type);
     }
     public ConfigValue<E> set(E val) {
         this.value = val;
